@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <center>
+      <ListView prefHeight="200.0" prefWidth="437.0" BorderPane.alignment="CENTER" />
+   </center>
+   <left>
+      <Label fx:id="ConnectionStatus" alignment="TOP_LEFT" prefHeight="17.0" prefWidth="76.0" text="Label" BorderPane.alignment="TOP_LEFT" />
+   </left>
+   <bottom>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="MessageBox" prefHeight="100.0" prefWidth="321.0">
+               <HBox.margin>
+                  <Insets bottom="20.0" left="120.0" top="20.0" />
+               </HBox.margin>
+            </TextArea>
+            <Button fx:id="sendMessageButton" mnemonicParsing="false" onAction="#SendMessage" prefHeight="60.0" prefWidth="50.0" text="Send">
+               <HBox.margin>
+                  <Insets top="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </bottom>
+   <right>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="disconnectButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#DisconnectFromServer" text="Disconnect" />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Current Users" />
+            <ListView prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </VBox>
+   </right>
+</BorderPane>
