@@ -11,31 +11,31 @@ public class ChatAppClientController {
 
 	// TODO Create run method that handles the flow of the program
 	@FXML
-    private Button disconnectButton;
+	private Button disconnectButton;
 
-    @FXML
-    private Button sendMessageButton;
+	@FXML
+	private Button sendMessageButton;
 
-    @FXML
-    private ListView<String> CurrentUsersList;
-    
-    @FXML
-    private ListView<String> MessagesView;
+	@FXML
+	private ListView<String> CurrentUsersList;
 
-    @FXML
-    private Label ConnectionStatus;
+	@FXML
+	private ListView<String> MessagesView;
 
-    @FXML
-    private TextArea MessageBox;
+	@FXML
+	private Label ConnectionStatus;
 
-    @FXML
-    void SendMessage(ActionEvent event) {
+	@FXML
+	private TextArea MessageBox;
 
-    }
+	@FXML
+	void SendMessage(ActionEvent event) {
 
-    @FXML
-    void DisconnectFromServer(ActionEvent event) {
+	}
 
-    }
+	@FXML
+	void DisconnectFromServer(ActionEvent event) {
+
+	}
 
 }
