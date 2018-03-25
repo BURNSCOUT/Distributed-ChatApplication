@@ -15,6 +15,7 @@ public class ChatAppServer {
 	private static HashMap<String, Socket> clients;
 	private final static int PORT = 4225;
 	private volatile static ArrayDeque<String> messages;
+	private static Object lock = new Object();
 
 	public static void run() {
 		Runnable hookRun = () -> {
@@ -67,33 +68,35 @@ public class ChatAppServer {
 
 				while (!client.isClosed()) {
 					String msg = reader.readLine();
-					System.out.println("Server recieved msg: " + msg);
-					messages.push(user + ": " + msg);
+					if(msg != null) {
+						System.out.println("Server recieved msg: " + msg);
+						synchronized(lock) {
+							messages.push(user + ": " + msg);
+						}
+					} else {
+						clients.remove(user);
+						client.close();
+						input.close();
+						reader.close();
+						System.out.println("I have disconnected");
+					}
 				}
 
 			} catch (IOException e) {
 				System.out.println("Error occured while communicating with client");
 				e.printStackTrace();
 			}
-
-			try {
-				clients.remove(user);
-				client.close();
-				input.close();
-				reader.close();
-			} catch (IOException e) {
-				System.out.println("Error occured while closing the " + user + " client socket");
-			}
 		};
 	}
 
 	private static Runnable createSendingRunnable() {
 		return () -> {
+			PrintStream stream = null;
 			while (true) {
 				if (!messages.isEmpty()) {
 					for (Socket current : clients.values()) {
 						try {
-							PrintStream stream = new PrintStream(current.getOutputStream());
+							stream = new PrintStream(current.getOutputStream());
 							System.out.println(messages.peek());
 							stream.println(messages.peek());
 
