@@ -71,5 +71,12 @@ public class ChatAppClientController {
 			}
 		};
 	}
+	
+	private String parseMessage(String serverMessage) {
+		String[] splitstr = serverMessage.split(",");
+		String formattedMessage = String.format("[%s] %s : %s", splitstr[0], splitstr[1], splitstr[2]);
+		
+		return formattedMessage;
+	}
 
 }
