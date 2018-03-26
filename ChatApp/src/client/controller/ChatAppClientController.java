@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import client.model.ChatAppClient;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,12 +36,16 @@ public class ChatAppClientController {
 	@FXML
 	private TextArea MessageBox;
 
+	private ObservableList<String> messages = FXCollections.observableArrayList();
+	
 	public void initialize() {
 		this.client = new ChatAppClient();
+		this.MessagesView.setItems(this.messages);
 		Thread messageView = new Thread(messagesViewUpdater());
 		Thread incomingMessage = new Thread(createIncomingMessageRunnable());
 		messageView.start();
 		incomingMessage.start();
+		
 	}
 
 	@FXML
@@ -66,10 +73,11 @@ public class ChatAppClientController {
 
 	private Runnable messagesViewUpdater() {
 		return () -> {
-			while (true) {
+			while (!this.client.getSocket().isClosed()) {
 				if (!this.client.getMessages().isEmpty()) {
 					String message = this.client.getMessages().pop();
 					// somehow put message in messagesview
+					this.messages.add(message);
 				}
 			}
 		};
@@ -84,7 +92,7 @@ public class ChatAppClientController {
 				System.out.println("Server is offline");
 			}
 			String message = null;
-			while(true) {
+			while(!this.client.getSocket().isClosed()) {
 				try {
 					message = reader.readLine();
 				} catch (IOException e) {
