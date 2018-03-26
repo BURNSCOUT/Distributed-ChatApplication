@@ -1,5 +1,6 @@
 package client.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 import client.model.ChatAppClient;
@@ -35,7 +36,9 @@ public class ChatAppClientController {
 	public void initialize() {
 		this.client = new ChatAppClient();
 		Thread messageView = new Thread(messagesViewUpdater());
+		Thread incomingMessage = new Thread(createIncomingMessageRunnable());
 		messageView.start();
+		incomingMessage.start();
 	}
 
 	@FXML
@@ -67,6 +70,30 @@ public class ChatAppClientController {
 				if (!this.client.getMessages().isEmpty()) {
 					String message = this.client.getMessages().pop();
 					// somehow put message in messagesview
+				}
+			}
+		};
+	}
+	
+	private Runnable createIncomingMessageRunnable() {
+		return () -> {
+			BufferedReader reader = null;
+			try {
+				reader = new BufferedReader(this.client.getIncoming());
+			} catch (NullPointerException e) {
+				System.out.println("Server is offline");
+			}
+			String message = null;
+			while(true) {
+				try {
+					message = reader.readLine();
+				} catch (IOException e) {
+					System.out.println("Failed to get message stream from server");
+				} catch (NullPointerException e) {
+					break;
+				}
+				if(message != null && !message.equals("")) {
+					this.client.getMessages().push(message);
 				}
 			}
 		};
