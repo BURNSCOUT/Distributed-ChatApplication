@@ -89,8 +89,8 @@ public class ChatAppServer {
 							messages.push(msg);
 						}
 					} else {
-						messages.push(LocalDateTime.now() + ",Server," + user + " has left the server");
 						clients.remove(user);
+						messages.push(LocalDateTime.now() + ",Server," + user + " has left the server");
 						client.close();
 						input.close();
 						reader.close();
