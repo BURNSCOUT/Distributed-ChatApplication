@@ -14,7 +14,7 @@ public class ChatAppClient {
 	private Socket client;
 	private InputStreamReader incoming;
 	private PrintStream outgoing;
-	private String userName; // Make constructor take in user name when we have the GUI for it
+	private String userName;
 
 	public ChatAppClient() {
 		this.messages = new ArrayDeque<String>();
@@ -41,5 +41,13 @@ public class ChatAppClient {
 
 	public Socket getSocket() {
 		return this.client;
+	}
+	
+	public String getUserName() {
+		return this.userName;
+	}
+	
+	public void setUsername(String username) {
+		this.userName = username;
 	}
 }

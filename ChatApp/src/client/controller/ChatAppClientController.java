@@ -38,8 +38,11 @@ public class ChatAppClientController {
 
 	private ObservableList<String> messages = FXCollections.observableArrayList();
 	
+	public ChatAppClientController(ChatAppClient client) {
+		this.client = client;
+	}
+	
 	public void initialize() {
-		this.client = new ChatAppClient();
 		this.MessagesView.setItems(this.messages);
 		Thread messageView = new Thread(messagesViewUpdater());
 		Thread incomingMessage = new Thread(createIncomingMessageRunnable());
@@ -52,6 +55,7 @@ public class ChatAppClientController {
 	void SendMessage(ActionEvent event) {
 		String message = this.MessageBox.getText();
 		this.MessageBox.clear();
+		message = this.client.getUserName() + ": " + message;
 
 		this.client.getOutgoing().println(message);
 		// I think this is done not sure though

@@ -16,6 +16,7 @@ public class ChatAppServer {
 	private final static int PORT = 4225;
 	private volatile static ArrayDeque<String> messages;
 	private static Object lock = new Object();
+	private static Object lock2 = new Object();
 
 	public static void run() {
 		Runnable hookRun = () -> {
@@ -38,8 +39,6 @@ public class ChatAppServer {
 			System.out.println(e);
 		}
 
-		int count = 1;
-
 		while (true) {
 			Socket client = null;
 			try {
@@ -50,21 +49,36 @@ public class ChatAppServer {
 			}
 
 			if (client != null) {
-				clients.put("User" + count, client);
-				Thread current = new Thread(createRunnable(client, "User" + count));
+				Thread current = new Thread(createRunnable(client));
 				current.start();
-				count++;
 			}
 		}
 	}
 
-	private static Runnable createRunnable(Socket client, String user) {
+	private static Runnable createRunnable(Socket client) {
 		return () -> {
 			InputStreamReader input = null;
 			BufferedReader reader = null;
 			try {
 				input = new InputStreamReader(client.getInputStream());
 				reader = new BufferedReader(input);
+				
+				boolean pass = true;
+				String user = null;
+				PrintStream stream = new PrintStream(client.getOutputStream());
+				while(pass) {
+					user = reader.readLine();
+					synchronized(lock2) {
+						if(user != null && !user.equals("") && clients.get(user) == null) {
+							clients.put(user, client);
+							stream.println("true");
+							messages.push(user + " has joined the chat room.");
+							pass = false;
+						} else  {
+							stream.println("false");
+						}
+					}
+				}
 
 				while (!client.isClosed()) {
 					String msg = reader.readLine();

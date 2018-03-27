@@ -16,8 +16,8 @@ public class ChatAppClientMain extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("view/ClientView.fxml"));
-			Scene scene = new Scene(root, 613, 300);
+			BorderPane root = FXMLLoader.load(getClass().getResource("view/ClientLoginView.fxml"));
+			Scene scene = new Scene(root, 300, 200);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (Exception e) {
