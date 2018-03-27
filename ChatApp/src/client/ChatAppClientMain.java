@@ -2,13 +2,19 @@ package client;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+
+import java.net.Socket;
+
+import client.model.ChatAppClient;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
 public class ChatAppClientMain extends Application {
+	public static ChatAppClient client;
 
 	public static void main(String[] args) {
+		client = new ChatAppClient();
 		launch(args);
 
 	}

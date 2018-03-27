@@ -3,6 +3,7 @@ package client.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import client.ChatAppClientMain;
 import client.model.ChatAppClient;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,13 +29,12 @@ public class LoginViewController {
     
     @FXML
     void initialize() {
-    	this.client = new ChatAppClient();
     }
     
     @FXML
     void LoginOnClick(ActionEvent event) {
     	String user = this.usernameInput.getText();
-    	this.client.getOutgoing().println(user);
+    	ChatAppClientMain.client.getOutgoing().println(user);
     	if(this.checkLogin(user)) {
     		this.openMainWindow();
     	} else {
@@ -45,7 +45,7 @@ public class LoginViewController {
     private boolean checkLogin(String user) {
     	BufferedReader reader = null;
     	try {
-    		reader = new BufferedReader(this.client.getIncoming());
+    		reader = new BufferedReader(ChatAppClientMain.client.getIncoming());
     	} catch (NullPointerException e) {
     		System.out.println("Server is offline");
     	}
@@ -58,7 +58,7 @@ public class LoginViewController {
     	}
     	
     	if(message.equals("true")) {
-    		this.client.setUsername(user);
+    		ChatAppClientMain.client.setUsername(user);
     		return true;
     	}
     	return false;
@@ -69,7 +69,7 @@ public class LoginViewController {
     	try {
     		Stage stage = new Stage();
     		FXMLLoader loader = FXMLLoader.load(getClass().getResource("../view/ClientLoginView.fxml"));
-    		loader.setController(new ChatAppClientController(this.client));
+    		loader.setController(new ChatAppClientController(ChatAppClientMain.client));
     		Parent root = loader.load();
     		Scene scene = new Scene(root, 613, 300);
     		stage.setScene(scene);

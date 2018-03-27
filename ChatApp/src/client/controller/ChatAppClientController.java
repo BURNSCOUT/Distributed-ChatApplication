@@ -3,6 +3,7 @@ package client.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import client.ChatAppClientMain;
 import client.model.ChatAppClient;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
@@ -39,7 +40,6 @@ public class ChatAppClientController {
 	private ObservableList<String> messages = FXCollections.observableArrayList();
 	
 	public ChatAppClientController(ChatAppClient client) {
-		this.client = client;
 	}
 	
 	public void initialize() {
@@ -55,18 +55,18 @@ public class ChatAppClientController {
 	void SendMessage(ActionEvent event) {
 		String message = this.MessageBox.getText();
 		this.MessageBox.clear();
-		message = this.client.getUserName() + ": " + message;
+		message = ChatAppClientMain.client.getUserName() + ": " + message;
 
-		this.client.getOutgoing().println(message);
+		ChatAppClientMain.client.getOutgoing().println(message);
 		// I think this is done not sure though
 	}
 
 	@FXML
 	void DisconnectFromServer(ActionEvent event) {
 		try {
-			this.client.getSocket().close();
-			this.client.getIncoming().close();
-			this.client.getOutgoing().close();
+			ChatAppClientMain.client.getSocket().close();
+			ChatAppClientMain.client.getIncoming().close();
+			ChatAppClientMain.client.getOutgoing().close();
 		} catch (IOException e) {
 			System.out.println("Client failed to unbind from server");
 		}
@@ -77,9 +77,9 @@ public class ChatAppClientController {
 
 	private Runnable messagesViewUpdater() {
 		return () -> {
-			while (!this.client.getSocket().isClosed()) {
-				if (!this.client.getMessages().isEmpty()) {
-					String message = this.client.getMessages().pop();
+			while (!ChatAppClientMain.client.getSocket().isClosed()) {
+				if (!ChatAppClientMain.client.getMessages().isEmpty()) {
+					String message = ChatAppClientMain.client.getMessages().pop();
 					// somehow put message in messagesview
 					this.messages.add(message);
 				}
@@ -91,12 +91,12 @@ public class ChatAppClientController {
 		return () -> {
 			BufferedReader reader = null;
 			try {
-				reader = new BufferedReader(this.client.getIncoming());
+				reader = new BufferedReader(ChatAppClientMain.client.getIncoming());
 			} catch (NullPointerException e) {
 				System.out.println("Server is offline");
 			}
 			String message = null;
-			while(!this.client.getSocket().isClosed()) {
+			while(!ChatAppClientMain.client.getSocket().isClosed()) {
 				try {
 					message = reader.readLine();
 				} catch (IOException e) {
@@ -105,7 +105,7 @@ public class ChatAppClientController {
 					break;
 				}
 				if(message != null && !message.equals("")) {
-					this.client.getMessages().push(message);
+					ChatAppClientMain.client.getMessages().push(message);
 				}
 			}
 		};
