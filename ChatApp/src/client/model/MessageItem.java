@@ -41,7 +41,7 @@ public class MessageItem {
 		
 		sb.append(split[2]);
 		for(int i = 3; i < split.length; i++) {
-			sb.append(", " + split[i]);
+			sb.append("," + split[i]);
 		}
 		
 		this.userName = split[1];
