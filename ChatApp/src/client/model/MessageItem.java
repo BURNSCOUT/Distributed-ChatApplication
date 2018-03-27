@@ -1,10 +1,8 @@
 /**
  * 
  */
-package server.model;
+package client.model;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -35,6 +33,20 @@ public class MessageItem {
 		this.userName = userName;
 		this.dateTime = dateTime;
 		this.message = message;
+	}
+	
+	public MessageItem(String message) {
+		String[] split = message.split(",");
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(split[2]);
+		for(int i = 3; i < split.length; i++) {
+			sb.append(", " + split[i]);
+		}
+		
+		this.userName = split[1];
+		this.dateTime = LocalDateTime.parse(split[0]);
+		this.message = sb.toString();
 	}
 	
 	/**
@@ -91,8 +103,12 @@ public class MessageItem {
 		return message;
 	}
 	
+	public String toCSV() {
+		return this.dateTime.toString() + "," + this.userName + "," + this.message + System.lineSeparator();
+	}
+	
 	@Override
 	public String toString() {
-		return "[" + this.dateTime.toString() + "] " + this.userName + " : " + this.message;
+		return "[" + this.dateTime.getHour() + ":" + this.dateTime.getMinute() + "] " + this.userName + " : " + this.message;
 	}
 }

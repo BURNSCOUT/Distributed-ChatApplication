@@ -1,7 +1,7 @@
 /**
  * 
  */
-package server.utility;
+package client.utility;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

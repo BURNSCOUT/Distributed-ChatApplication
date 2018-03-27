@@ -2,11 +2,14 @@ package client.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import client.ChatAppClientMain;
-import client.model.ChatAppClient;
+import client.io.LogWriter;
+import client.model.MessageItem;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +17,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 
 public class ChatAppClientController {
 
@@ -37,6 +39,7 @@ public class ChatAppClientController {
 	private TextArea MessageBox;
 
 	private ObservableList<String> messages = FXCollections.observableArrayList();
+	private ArrayList<MessageItem> items;
 	
 	public ChatAppClientController() {
 	}
@@ -47,14 +50,14 @@ public class ChatAppClientController {
 		Thread incomingMessage = new Thread(createIncomingMessageRunnable());
 		messageView.start();
 		incomingMessage.start();
-		
+		this.items = new ArrayList<MessageItem>();
 	}
 
 	@FXML
 	void SendMessage(ActionEvent event) {
 		String message = this.MessageBox.getText();
 		this.MessageBox.clear();
-		message = ChatAppClientMain.client.getUserName() + ": " + message;
+		message = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "," + ChatAppClientMain.client.getUserName() + "," + message;
 
 		ChatAppClientMain.client.getOutgoing().println(message);
 		// I think this is done not sure though
@@ -63,13 +66,17 @@ public class ChatAppClientController {
 	@FXML
 	void DisconnectFromServer(ActionEvent event) {
 		try {
+			LogWriter.writeToLogFile(ChatAppClientMain.client.getUserName(), this.items);
 			ChatAppClientMain.client.getSocket().close();
 			ChatAppClientMain.client.getIncoming().close();
 			ChatAppClientMain.client.getOutgoing().close();
+			System.exit(0);
 		} catch (IOException e) {
+			System.out.println(e.getMessage());
 			System.out.println("Client failed to unbind from server");
 		}
 
+		
 		// Hide the current window
 		// re-show user name input in case they want to reconnect
 	}
@@ -80,7 +87,9 @@ public class ChatAppClientController {
 				if (!ChatAppClientMain.client.getMessages().isEmpty()) {
 					String message = ChatAppClientMain.client.getMessages().pop();
 					// somehow put message in messagesview
-					this.messages.add(message);
+					MessageItem current = new MessageItem(message);
+					this.items.add(current);
+					this.messages.add(current.toString());
 				}
 			}
 		};

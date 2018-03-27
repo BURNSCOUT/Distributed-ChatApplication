@@ -13,8 +13,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import server.model.MessageItem;
-import server.utility.DateTimeFileNameFormatter;
+import client.model.MessageItem;
+import client.utility.DateTimeFileNameFormatter;
 
 /**
  * @author jason

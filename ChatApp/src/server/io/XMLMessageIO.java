@@ -25,8 +25,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import server.model.MessageItem;
-import server.utility.DateTimeFileNameFormatter;
+import client.model.MessageItem;
+import client.utility.DateTimeFileNameFormatter;
 
 /**
  * @author jason

@@ -72,7 +72,7 @@ public class ChatAppServer {
 						if(user != null && !user.equals("") && clients.get(user) == null) {
 							clients.put(user, client);
 							stream.println("true");
-							messages.push(user + " has joined the chat room.");
+							messages.push("Server: " + user + " has joined the chat room.");
 							pass = false;
 						} else  {
 							stream.println("false");
