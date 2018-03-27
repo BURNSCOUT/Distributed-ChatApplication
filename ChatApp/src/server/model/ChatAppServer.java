@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 
@@ -72,7 +73,7 @@ public class ChatAppServer {
 						if(user != null && !user.equals("") && clients.get(user) == null) {
 							clients.put(user, client);
 							stream.println("true");
-							messages.push("Server: " + user + " has joined the chat room.");
+							messages.push(LocalDateTime.now() + ",Server," + user + " has joined the chat room.");
 							pass = false;
 						} else  {
 							stream.println("false");
