@@ -85,7 +85,7 @@ public class ChatAppServer {
 					if(msg != null) {
 						System.out.println("Server recieved msg: " + msg);
 						synchronized(lock) {
-							messages.push(user + ": " + msg);
+							messages.push(msg);
 						}
 					} else {
 						clients.remove(user);

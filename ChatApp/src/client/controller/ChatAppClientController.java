@@ -14,10 +14,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 public class ChatAppClientController {
-
-	private ChatAppClient client;
 
 	@FXML
 	private Button disconnectButton;
@@ -39,9 +38,9 @@ public class ChatAppClientController {
 
 	private ObservableList<String> messages = FXCollections.observableArrayList();
 	
-	public ChatAppClientController(ChatAppClient client) {
+	public ChatAppClientController() {
 	}
-	
+
 	public void initialize() {
 		this.MessagesView.setItems(this.messages);
 		Thread messageView = new Thread(messagesViewUpdater());

@@ -28,10 +28,6 @@ public class LoginViewController {
     private ChatAppClient client;
     
     @FXML
-    void initialize() {
-    }
-    
-    @FXML
     void LoginOnClick(ActionEvent event) {
     	String user = this.usernameInput.getText();
     	ChatAppClientMain.client.getOutgoing().println(user);
@@ -65,17 +61,18 @@ public class LoginViewController {
     }
     
     private void openMainWindow() {
-    	this.errorLabel.getScene().getWindow().hide();	
+    	this.errorLabel.getScene().getWindow().hide();
+    	System.out.println("Fired");
     	try {
     		Stage stage = new Stage();
-    		FXMLLoader loader = FXMLLoader.load(getClass().getResource("../view/ClientLoginView.fxml"));
-    		loader.setController(new ChatAppClientController(ChatAppClientMain.client));
-    		Parent root = loader.load();
+    		Parent root = FXMLLoader.load(getClass().getResource("../view/ClientView.fxml"));
     		Scene scene = new Scene(root, 613, 300);
     		stage.setScene(scene);
     		stage.show();
+    		System.out.println("Made it");
     	} catch (Exception e) {
 			// TODO: handle exception
+    		System.out.println(e.getMessage());
 		}
     }
 }

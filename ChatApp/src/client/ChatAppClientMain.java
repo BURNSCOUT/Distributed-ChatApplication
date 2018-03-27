@@ -24,6 +24,8 @@ public class ChatAppClientMain extends Application {
 		try {
 			BorderPane root = FXMLLoader.load(getClass().getResource("view/ClientLoginView.fxml"));
 			Scene scene = new Scene(root, 300, 200);
+			//BorderPane root = FXMLLoader.load(getClass().getResource("view/ClientLoginView.fxml"));
+			//Scene scene = new Scene(root, 613, 300);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (Exception e) {
