@@ -93,6 +93,6 @@ public class MessageItem {
 	
 	@Override
 	public String toString() {
-		return "[" + this.timeStamp.toString() + "] " + this.userName + " : " + this.message;
+		return "[" + this.dateTime.toString() + "] " + this.userName + " : " + this.message;
 	}
 }
