@@ -8,7 +8,7 @@ import java.util.ArrayDeque;
 
 public class ChatAppClient {
 
-	private final String HOST = "160.10.217.145";
+	private final String HOST = "160.10.217.143";
 	private final int PORT = 4225;
 	private volatile ArrayDeque<String> messages;
 	private Socket client;

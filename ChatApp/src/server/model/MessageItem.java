@@ -89,4 +89,9 @@ public class MessageItem {
 	public String getMessage() {
 		return message;
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + this.timeStamp.toString() + "] " + this.userName + " : " + this.message;
+	}
 }
