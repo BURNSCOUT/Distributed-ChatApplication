@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import server.model.MessageItem;
@@ -30,19 +31,19 @@ public class MessageIO {
 	 * Saves History in a file name formatted 'userName_yyyy-mm-dd_HH-mm-ss.f.txt' in a resource folder in project root directory in .CSV format
 	 * 
 	 * @param clientUserName The user who's history is being saved
-	 * @param connectionTimestamp The SQL Timestamp from java api java.sql.Timestamp 
+	 * @param connectionDateTime The SQL Timestamp from java api java.sql.Timestamp 
 	 * @param history A collection of MessageItem objects
 	 * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of exceptions produced by failed or interrupted I/O operations.
 	 */
-	public static void saveFile(String clientUserName, Timestamp connectionTimestamp, ArrayList<MessageItem> history) throws IOException {
-		String path = getFileName(clientUserName, connectionTimestamp);
+	public static void saveFile(String clientUserName, LocalDateTime connectionDateTime, ArrayList<MessageItem> history) throws IOException {
+		String path = getFileName(clientUserName, connectionDateTime);
 		
 		FileWriter fileWriter = new FileWriter(path);
 		
 		for (MessageItem messageItem : history) {
 			fileWriter.append(messageItem.getUserName());
 			fileWriter.append(COMMA_DELIMITER);
-			fileWriter.append(messageItem.getTimeStamp().toString());
+			fileWriter.append(messageItem.getDateTime().toString());
 			fileWriter.append(COMMA_DELIMITER);
 			fileWriter.append(messageItem.getMessage());
 			fileWriter.append(NEW_LINE_SEPARATOR);
@@ -58,13 +59,13 @@ public class MessageIO {
      * in a resource folder in project root directory
 	 * 
 	 * @param clientUserName The user who's history is being saved
-	 * @param connectionTimestamp The SQL Timestamp from java api java.sql.Timestamp 
+	 * @param connectionDateTime The SQL Timestamp from java api java.sql.Timestamp 
      * @return A collection of MessageItem objects
 	 * @throws FileNotFoundException Signals that an attempt to open the file denoted by a specified pathname has failed.
 	 * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of exceptions produced by failed or interrupted I/O operations.
 	 */
-	public static ArrayList<MessageItem> loadFile(String clientUserName, Timestamp connectionTimestamp) throws FileNotFoundException, IOException {
-		String path = getFileName(clientUserName, connectionTimestamp);
+	public static ArrayList<MessageItem> loadFile(String clientUserName, LocalDateTime connectionDateTime) throws FileNotFoundException, IOException {
+		String path = getFileName(clientUserName, connectionDateTime);
 		
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
 		String line = "";
@@ -85,14 +86,14 @@ public class MessageIO {
 	
 	private static MessageItem getMessageItem (String[] tokens) {
 		String userName = tokens[USERNAME_INDEX];
-		Timestamp timestamp = Timestamp.valueOf(tokens[TIMESTAMP_INDEX]);
+		LocalDateTime dateTime = LocalDateTime.parse(tokens[TIMESTAMP_INDEX]);
 		String message = tokens[MESSAGE_INDEX];
 		
-		return new MessageItem(userName, timestamp, message);
+		return new MessageItem(userName, dateTime, message);
 	}
 	
-	private static String getFileName(String clientUserName, Timestamp connectionTimestamp) {
-    	String formattedTimestamp = DateTimeFileNameFormatter.FormatDateTimeToFileName(connectionTimestamp);
+	private static String getFileName(String clientUserName, LocalDateTime connectionDateTime) {
+    	String formattedTimestamp = DateTimeFileNameFormatter.formatLocalDateTimeToFile(connectionDateTime);
 		return "resources" + File.separator + clientUserName + "_" + formattedTimestamp + ".txt";
     }
 }

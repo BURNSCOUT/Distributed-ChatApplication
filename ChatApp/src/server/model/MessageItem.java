@@ -5,6 +5,7 @@ package server.model;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * @author jason
@@ -12,7 +13,7 @@ import java.time.Instant;
  */
 public class MessageItem {
 	private String userName;
-	private Timestamp timeStamp;
+	private LocalDateTime dateTime;
 	private String message;
 	
 	/**
@@ -20,19 +21,19 @@ public class MessageItem {
 	 */
 	public MessageItem() {
 		this.userName = "";
-		this.timeStamp = Timestamp.from(Instant.now());
+		this.dateTime = LocalDateTime.now();
 		this.message = "";
 	}
 	
 	/**
 	 * Initializes and instance of MessageItem with given properties
 	 * @param userName user associated with message
-	 * @param timeStamp time message was sent in java Class Timestamp format
+	 * @param dateTime time message was sent in java Class LocalDateTime format
 	 * @param message the message
 	 */
-	public MessageItem(String userName, Timestamp timeStamp, String message) {
+	public MessageItem(String userName, LocalDateTime dateTime, String message) {
 		this.userName = userName;
-		this.timeStamp = timeStamp;
+		this.dateTime = dateTime;
 		this.message = message;
 	}
 	
@@ -48,10 +49,10 @@ public class MessageItem {
 	/**
 	 * Set the time the message was sent
 	 * 
-	 * @param timeStamp time sent in java Class Timestamp format
+	 * @param dateTime time sent in LocalDateTime format
 	 */
-	public void setTimeStamp(Timestamp timeStamp) {
-		this.timeStamp = timeStamp;
+	public void setDateTime(LocalDateTime dateTime) {
+		this.dateTime = dateTime;
 	}
 	
 	/**
@@ -77,8 +78,8 @@ public class MessageItem {
 	 * 
 	 * @return the time the message was sent
 	 */
-	public Timestamp getTimeStamp() {
-		return timeStamp;
+	public LocalDateTime getDateTime() {
+		return dateTime;
 	}
 	
 	/**

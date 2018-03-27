@@ -29,6 +29,10 @@ private ArrayList<String> takenUserNames;
 		}
 	}
 	
+	public UniqueNameChecker(ArrayList<String> takenUsernames) {
+		this.takenUserNames = takenUsernames;
+	}
+	
 	
 	/**
 	 * Checks specified userName against all current userNames in server for uniqueness. 

@@ -6,6 +6,7 @@ package server.io;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,7 +36,7 @@ public class XMLMessageIO {
 	private static final String ROOT_ELEMENT_NAME = "History";
 	private static final String CHAT_HISTORY_ITEM_ELEMENT_NAME = "MessageItem";
 	private static final String CHAT_HISTORY_ID_ELEMENT_NAME = "id";
-	private static final String TIME_STAMP_ELEMENT_NAME = "timestamp";
+	private static final String DATE_TIME_ELEMENT_NAME = "timestamp";
 	private static final String USERNAME_ELEMENT_NAME = "username";
 	private static final String MESSAGE_ELEMENT_NAME = "message";
 	
@@ -55,7 +56,7 @@ public class XMLMessageIO {
 	 * @throws ParserConfigurationException Indicates a serious configuration error
 	 * @throws TransformerException This class specifies an exceptional condition that occurred during the transformation process
 	 */
-	public static void saveHistory(String clientUserName, Timestamp connectionTimestamp, ArrayList<MessageItem> history) throws ParserConfigurationException, TransformerException {
+	public static void saveHistory(String clientUserName, LocalDateTime connectionTimestamp, ArrayList<MessageItem> history) throws ParserConfigurationException, TransformerException {
 		
 		String fileName = getFileName(clientUserName, connectionTimestamp);
 		
@@ -89,7 +90,7 @@ public class XMLMessageIO {
 		messageItemElement.setAttribute(CHAT_HISTORY_ID_ELEMENT_NAME, String.valueOf(index));
 		
 		messageItemElement.appendChild(getMessageItemElements(document, messageItemElement, USERNAME_ELEMENT_NAME, messageItem.getUserName()));
-		messageItemElement.appendChild(getMessageItemElements(document, messageItemElement, TIME_STAMP_ELEMENT_NAME, messageItem.getTimeStamp().toString()));
+		messageItemElement.appendChild(getMessageItemElements(document, messageItemElement, DATE_TIME_ELEMENT_NAME, messageItem.getDateTime().toString()));
 		messageItemElement.appendChild(getMessageItemElements(document, messageItemElement, MESSAGE_ELEMENT_NAME, messageItem.getMessage()));
 		
 		return messageItemElement;
@@ -129,15 +130,15 @@ public class XMLMessageIO {
 	 * </History>
      * 
      * @param clientUserName The user who's history is being saved
-	 * @param connectionTimestamp The SQL Timestamp from java api java.sql.Timestamp 
+	 * @param connectionLocalDateTime The SQL Timestamp from java api java.sql.Timestamp 
      * @return A collection of MessageItem objects
      * @throws ParserConfigurationException Indicates a serious configuration error.
      * @throws SAXException Encapsulate a general SAX error or warning.
      * @throws IOException Signals that an I/O exception of some sort has occurred. This class is the general class of exceptions produced by failed or interrupted I/O operations.
      */
-    public static ArrayList<MessageItem> loadHistory(String clientUserName, Timestamp connectionTimestamp) throws ParserConfigurationException, SAXException, IOException {
+    public static ArrayList<MessageItem> loadHistory(String clientUserName, LocalDateTime connectionLocalDateTime) throws ParserConfigurationException, SAXException, IOException {
 		
-		String fileName = getFileName(clientUserName, connectionTimestamp);
+		String fileName = getFileName(clientUserName, connectionLocalDateTime);
 		
 		File xmlFile = new File(fileName);
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -162,7 +163,7 @@ public class XMLMessageIO {
 			Element element = (Element) node;
 			
 			messageItem.setUserName(getTagValue(USERNAME_ELEMENT_NAME, element));
-			messageItem.setTimeStamp(Timestamp.valueOf(getTagValue(TIME_STAMP_ELEMENT_NAME, element)));
+			messageItem.setDateTime(LocalDateTime.parse(getTagValue(DATE_TIME_ELEMENT_NAME, element)));
 			messageItem.setMessage(getTagValue(MESSAGE_ELEMENT_NAME, element));
 		}
 		
@@ -175,8 +176,8 @@ public class XMLMessageIO {
         return node.getNodeValue();
 	}
     
-    private static String getFileName(String clientUserName, Timestamp connectionTimestamp) {
-    	String formattedTimestamp = DateTimeFileNameFormatter.FormatDateTimeToFileName(connectionTimestamp);
+    private static String getFileName(String clientUserName, LocalDateTime connectionLocalDateTime) {
+    	String formattedTimestamp = DateTimeFileNameFormatter.formatLocalDateTimeToFile(connectionLocalDateTime);
 		return "resources" + File.separator + clientUserName + "_" + formattedTimestamp + ".txt";
     }
 }
