@@ -4,7 +4,9 @@
 package server.controller;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import server.io.UsernameIO;
 
@@ -33,6 +35,11 @@ private ArrayList<String> takenUserNames;
 		this.takenUserNames = takenUsernames;
 	}
 	
+	public UniqueNameChecker(ConcurrentHashMap<String, Socket> takenUsernamesMap) {
+		
+		this.takenUserNames = new ArrayList<String>(takenUsernamesMap.keySet());
+		
+	}
 	
 	/**
 	 * Checks specified userName against all current userNames in server for uniqueness. 
