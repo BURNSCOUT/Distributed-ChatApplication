@@ -63,19 +63,19 @@ public class ChatAppServer {
 			try {
 				input = new InputStreamReader(client.getInputStream());
 				reader = new BufferedReader(input);
-				
+
 				boolean pass = true;
 				String user = null;
 				PrintStream stream = new PrintStream(client.getOutputStream());
-				while(pass) {
+				while (pass) {
 					user = reader.readLine();
-					synchronized(lock2) {
-						if(user != null && !user.equals("") && clients.get(user) == null) {
+					synchronized (lock2) {
+						if (user != null && !user.equals("") && clients.get(user) == null) {
 							clients.put(user, client);
 							stream.println("true");
 							messages.push(LocalDateTime.now() + ",Server," + user + " has joined the chat room.");
 							pass = false;
-						} else  {
+						} else {
 							stream.println("false");
 						}
 					}
@@ -83,9 +83,9 @@ public class ChatAppServer {
 
 				while (!client.isClosed()) {
 					String msg = reader.readLine();
-					if(msg != null) {
+					if (msg != null) {
 						System.out.println("Server recieved msg: " + msg);
-						synchronized(lock) {
+						synchronized (lock) {
 							messages.push(msg);
 						}
 					} else {

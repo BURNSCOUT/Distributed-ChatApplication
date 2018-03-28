@@ -42,11 +42,11 @@ public class ChatAppClient {
 	public Socket getSocket() {
 		return this.client;
 	}
-	
+
 	public String getUserName() {
 		return this.userName;
 	}
-	
+
 	public void setUsername(String username) {
 		this.userName = username;
 	}

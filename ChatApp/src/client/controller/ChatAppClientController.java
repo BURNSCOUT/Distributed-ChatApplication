@@ -40,7 +40,7 @@ public class ChatAppClientController {
 
 	private ObservableList<String> messages = FXCollections.observableArrayList();
 	private ArrayList<MessageItem> items;
-	
+
 	public ChatAppClientController() {
 	}
 
@@ -57,10 +57,10 @@ public class ChatAppClientController {
 	void SendMessage(ActionEvent event) {
 		String message = this.MessageBox.getText();
 		this.MessageBox.clear();
-		message = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "," + ChatAppClientMain.client.getUserName() + "," + message;
+		message = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + ","
+				+ ChatAppClientMain.client.getUserName() + "," + message;
 
 		ChatAppClientMain.client.getOutgoing().println(message);
-		// I think this is done not sure though
 	}
 
 	@FXML
@@ -75,10 +75,6 @@ public class ChatAppClientController {
 			System.out.println(e.getMessage());
 			System.out.println("Client failed to unbind from server");
 		}
-
-		
-		// Hide the current window
-		// re-show user name input in case they want to reconnect
 	}
 
 	private Runnable messagesViewUpdater() {
@@ -86,15 +82,18 @@ public class ChatAppClientController {
 			while (!ChatAppClientMain.client.getSocket().isClosed()) {
 				if (!ChatAppClientMain.client.getMessages().isEmpty()) {
 					String message = ChatAppClientMain.client.getMessages().pop();
-					// somehow put message in messagesview
 					MessageItem current = new MessageItem(message);
 					this.items.add(current);
-					this.messages.add(current.toString());
+					try {
+						this.messages.add(current.toString());
+					} catch (IllegalStateException e) {
+
+					}
 				}
 			}
 		};
 	}
-	
+
 	private Runnable createIncomingMessageRunnable() {
 		return () -> {
 			BufferedReader reader = null;
@@ -104,7 +103,7 @@ public class ChatAppClientController {
 				System.out.println("Server is offline");
 			}
 			String message = null;
-			while(!ChatAppClientMain.client.getSocket().isClosed()) {
+			while (!ChatAppClientMain.client.getSocket().isClosed()) {
 				try {
 					message = reader.readLine();
 				} catch (IOException e) {
@@ -112,18 +111,10 @@ public class ChatAppClientController {
 				} catch (NullPointerException e) {
 					break;
 				}
-				if(message != null && !message.equals("")) {
+				if (message != null && !message.equals("")) {
 					ChatAppClientMain.client.getMessages().push(message);
 				}
 			}
 		};
 	}
-	
-	private String parseMessage(String serverMessage) {
-		String[] splitstr = serverMessage.split(",");
-		String formattedMessage = String.format("[%s] %s : %s", splitstr[0], splitstr[1], splitstr[2]);
-		
-		return formattedMessage;
-	}
-
 }
