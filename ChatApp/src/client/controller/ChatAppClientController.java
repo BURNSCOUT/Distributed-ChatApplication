@@ -41,9 +41,15 @@ public class ChatAppClientController {
 	private ObservableList<String> messages = FXCollections.observableArrayList();
 	private ArrayList<MessageItem> items;
 
+	/**
+	 * Base Constructor for the ChatAppClientController
+	 */
 	public ChatAppClientController() {
 	}
 
+	/**
+	 * Initializes all required fields for the ChatAppClient
+	 */
 	public void initialize() {
 		this.MessagesView.setItems(this.messages);
 		Thread messageView = new Thread(messagesViewUpdater());
@@ -53,6 +59,12 @@ public class ChatAppClientController {
 		this.items = new ArrayList<MessageItem>();
 	}
 
+	/**
+	 * Sends a message to the ChatAppServer
+	 * 
+	 * @param event
+	 * 		The event that triggers this call
+	 */
 	@FXML
 	void SendMessage(ActionEvent event) {
 		String message = this.MessageBox.getText();
@@ -63,6 +75,13 @@ public class ChatAppClientController {
 		ChatAppClientMain.client.getOutgoing().println(message);
 	}
 
+	
+	/**
+	 * Disconnects from the Server and exits the program
+	 * 
+	 * @param event
+	 * 		The event that triggers this call
+	 */
 	@FXML
 	void DisconnectFromServer(ActionEvent event) {
 		try {

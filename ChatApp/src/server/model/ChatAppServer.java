@@ -19,6 +19,10 @@ public class ChatAppServer {
 	private static Object lock = new Object();
 	private static Object lock2 = new Object();
 
+	/**
+	 * The overall functionality for the ChatAppServer. 
+	 * It constantly checks for messages to send and Clients to connect.
+	 */
 	public static void run() {
 		Runnable hookRun = () -> {
 			try {

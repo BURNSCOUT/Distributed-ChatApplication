@@ -1,0 +1,5 @@
+To run the application you must be sure to start the Server before any Clients.
+You must put the Servers IP in the ChatAppClient Host field.
+When you have the Server running, start up a Client and enter a Username when prompted.
+If it is unique the chat window will appear and you may send messages by typing in the text area and clicking send.
+To disconnect just click the disconnect button and the application will close.

@@ -16,6 +16,9 @@ public class ChatAppClient {
 	private PrintStream outgoing;
 	private String userName;
 
+	/**
+	 * Creates a new instance of a ChatAppClient
+	 */
 	public ChatAppClient() {
 		this.messages = new ArrayDeque<String>();
 		try {
